@@ -3,13 +3,28 @@ import React, { useState } from 'react';
 type UserInfoCardProps = {
     name: string;
     role: string;
+    theme: string;
 }
 
-function UserInfoCard({name, role} : UserInfoCardProps) {
+function UserInfoCard({name, role, theme} : UserInfoCardProps) {
+
+    var themeColor = '';
+
+    if(theme === 'orange') {
+        themeColor = '#ff5722';
+    }else if(theme === 'blue') {
+        themeColor = '#2196f3';
+    }else if(theme === 'green') {
+        themeColor = '#4caf50';
+    }else{
+        themeColor = '#9e9e9e';
+    }
+
+    console.log(themeColor);
 
     return (
         <div className='user-info-card'>
-            <p style={{backgroundColor: '#007bff', color: '#fff'}} className="user-profile">{name.charAt(0).toUpperCase()}</p>
+            <p style={{backgroundColor: themeColor, color: '#fff'}} className="user-profile">{name.charAt(0).toUpperCase()}</p>
             <p className="user-name">{name}</p>
             <p className="user-role">{role}</p>
 
@@ -23,6 +38,8 @@ function UserInfoCard({name, role} : UserInfoCardProps) {
 export const  StateProps = () => {
     const [name, setName] = useState('');
     const [role, setRole] = useState('');
+    const [theme, setTheme] = useState('');
+
     
 
     return (
@@ -46,7 +63,7 @@ export const  StateProps = () => {
                 <br/>
                 <br/>
 
-<label style={{fontWeight: 'bold', marginRight: '10px'}}>
+            <label style={{fontWeight: 'bold', marginRight: '10px'}}>
                 Role
             </label>
 
@@ -59,10 +76,30 @@ export const  StateProps = () => {
                         setRole(e.target.value);
                     }}
                 />
-                
+                <br/>
+                <br/>
+
+            <label style={{fontWeight: 'bold', marginRight: '10px'}}>
+                Theme
+            </label>
+
+            <select
+            className='input-field'
+            value={theme}
+            onChange={(e) => {
+                setTheme(e.target.value);
+            }}>
+
+                    <option value="">Select Theme</option>
+                    <option value="orange">Orange</option>
+                    <option value="blue">Blue</option>
+                    <option value="green">Green</option>
+
+
+            </select>
             
 
-            {UserInfoCard({name, role})}
+            {UserInfoCard({name, role, theme})}
 
 
         </div>
