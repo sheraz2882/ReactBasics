@@ -7,6 +7,7 @@ function Header() {
             <nav className='nav'>
                 <Link to="/" className='nav-links'>React Basics</Link>
                 <Link to="/state-and-props" className="nav-links">State and Props</Link>
+                <Link to="/lifecycle-methods" className="nav-links">Lifecycle Methods</Link>
                 <Link to="/react-examples" className='nav-links'>React Examples</Link>
             </nav>
         </header>

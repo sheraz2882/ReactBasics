@@ -20,8 +20,6 @@ function UserInfoCard({name, role, theme} : UserInfoCardProps) {
         themeColor = '#9e9e9e';
     }
 
-    console.log(themeColor);
-
     return (
         <div className='user-info-card'>
             <p style={{backgroundColor: themeColor, color: '#fff'}} className="user-profile">{name.charAt(0).toUpperCase()}</p>
@@ -34,18 +32,14 @@ function UserInfoCard({name, role, theme} : UserInfoCardProps) {
 }
 
 
+function StatePropsExample1() {
 
-export const  StateProps = () => {
     const [name, setName] = useState('');
     const [role, setRole] = useState('');
     const [theme, setTheme] = useState('');
 
-    
-
     return (
         <div>
-            <h2>State and Props Live Examples</h2>
-
             <label style={{fontWeight: 'bold', marginRight: '10px'}}>
                 Name
             </label>
@@ -100,7 +94,84 @@ export const  StateProps = () => {
             
 
             {UserInfoCard({name, role, theme})}
+        </div>
+    );
+}
 
+
+interface Country{
+    code : string;
+    name: string;
+    population: string;
+    capital: string;
+}
+
+const countries: Country[] = [
+    {code : "PK", name: "Pakistan", population: "240 million", capital: "Islamabad"},
+    {code : "US", name: "United States", population: "335 million", capital: "Washington, D.C."},
+    {code : "IN", name: "India", population: "1.43 billion", capital: "New Delhi"},
+]
+
+
+function StatePropsExample2() {
+
+    const [selectedCode , setSelectedCode] = useState('');
+
+
+    const selectedCountry = countries.find(country => country.code === selectedCode);
+
+
+
+    return(
+        <div>   
+            <h2>Check Countries Information</h2>
+
+            <select
+                className='input-field'
+               value={selectedCode}
+               onChange={(e) => {setSelectedCode(e.target.value)}}>
+
+                <option value="">Select Country</option>
+                {
+                    countries.map((country) => (
+                        <option key={country.code} value={country.code}>
+                            {country.name}
+                        </option>
+                    ))
+                }
+
+            </select>
+
+            {selectedCountry && (
+                <div className='country-info'>
+                    <h3>{selectedCountry.name}</h3>
+                    <p><strong>Population:</strong> {selectedCountry.population}</p>
+                    <p><strong>Capital:</strong> {selectedCountry.capital}</p>
+                </div>
+            )}
+            
+        </div>
+    );
+
+
+}
+
+
+export const  StateProps = () => {
+    
+
+    
+
+    return (
+        <div>
+            <h2>State and Props Live Examples</h2>
+            <h3>Example One</h3>
+
+            <StatePropsExample1 />
+
+            <h3>Example Two</h3>
+
+            <StatePropsExample2 />
 
         </div>
     );

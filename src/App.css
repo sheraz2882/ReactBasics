@@ -132,3 +132,14 @@
   text-align: left;
   margin-top: -18px;
 }
+
+.country-info {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 350px;
+  margin: 20px auto;
+  background: #fafafa;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  text-align: left;
+}
