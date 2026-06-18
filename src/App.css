@@ -143,3 +143,91 @@
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
   text-align: left;
 }
+
+.lifecycle-methods-container {
+  padding: 20px;
+}
+
+.lifecycle-methods-container h2 {
+  font-size: 28px;
+  color: #007bff;
+  margin-bottom: 16px;
+  margin-top: 0;
+  font-weight: 600;
+}
+
+.lifecycle-methods-container p {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+.lifecycle-buttons-container {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.lifecycle-button {
+  padding: 12px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.lifecycle-button:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+.lifecycle-button:active {
+  background-color: #003d82;
+  transform: translateY(0);
+}
+
+.lifecycle-info-card {
+  border: 2px solid #007bff;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  box-shadow: 0 6px 16px rgba(0, 123, 255, 0.2);
+  animation: slideIn 0.3s ease-out;
+}
+
+.lifecycle-info-card h3 {
+  color: #007bff;
+  font-size: 20px;
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.lifecycle-info-card p {
+  color: #333;
+  line-height: 1.6;
+  margin: 10px 0;
+}
+
+.lifecycle-info-card strong {
+  color: #0056b3;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
