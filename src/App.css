@@ -231,3 +231,63 @@
     transform: translateY(0);
   }
 }
+
+.hooks-container h2{
+  margin-bottom: 20px;
+}
+.hook-button {
+  padding: 10px 35px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  border: none;
+  border-radius: 8px;
+  margin-right: 20px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(79, 70, 229, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.hook-button:hover {
+  background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(79, 70, 229, 0.3);
+}
+
+.hook-button:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 6px rgba(79, 70, 229, 0.25);
+}
+
+.hook-demo-card{
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.use-state-exam {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+
+}
+
+.hook-shopping-cart{
+  margin-top: 12px;
+}
+
+.product-display-card{
+display: flex;
+  flex-direction: row;
+  gap: 16px;
+  margin-top: 40px;
+}
+
+.product-info-card{
+display: flex;
+  flex-direction: column;
+  flex: 1;
+  flex-grow: 1;
+}
