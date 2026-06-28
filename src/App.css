@@ -267,12 +267,14 @@
   margin-top: 20px;
 }
 
-.use-state-exam {
+.use-state-exam, .use-effect-exam {
   display: flex;
   flex-direction: column;
   flex: 1;
 
 }
+
+
 
 .hook-shopping-cart{
   margin-top: 12px;
@@ -289,5 +291,4 @@ display: flex;
 display: flex;
   flex-direction: column;
   flex: 1;
-  flex-grow: 1;
 }
