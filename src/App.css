@@ -274,8 +274,6 @@
 
 }
 
-
-
 .hook-shopping-cart{
   margin-top: 12px;
 }
@@ -292,3 +290,34 @@ display: flex;
   flex-direction: column;
   flex: 1;
 }
+
+.search-input{
+  width: 70%;
+  padding: 10px 16px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 15px;
+  color: #111;
+  background: #f9f9f9;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.weather-widget{
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  border: none;
+  padding: 20px;
+  margin: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(79, 70, 229, 0.25);
+}
+
+.weather-widget h3{
+  color : #fff;
+}
+
+.weather-widget p{
+  color : #fff;
+}
+
+

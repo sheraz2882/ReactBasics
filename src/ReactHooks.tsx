@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 interface ReactHooksType {
   code: string;
@@ -232,13 +232,23 @@ const DisplayProducts: React.FC<DisplayProductsProps> = ({ addToCart }) => {
 
 function UseEffectDemo({ hookData }: { hookData: ReactHooksType }) {
   return (
-    <div className="hook-demo-card">
-      <div className="use-effect-exam">
-        <h3>CountDown Timer</h3>
-        <CountDownTimer initialSeconds={3600} />
+    <div>
+      <div className="hook-demo-card">
+        <div className="use-effect-exam">
+          <h3>CountDown Timer</h3>
+          <CountDownTimer initialSeconds={3600} />
+        </div>
+        <div className="use-effect-exam">
+          <h3>Check Internet</h3>
+          <CheckInternetState />
+        </div>
       </div>
-      <div className="use-effect-exam">
-        <h3>Check Internet</h3>
+
+      <div className="hook-demo-card">
+        <div className="use-effect-exam">
+          <h3>Current Weather 🌤️</h3>
+          <FetchWeatherApi />
+        </div>
       </div>
     </div>
   );
@@ -312,12 +322,240 @@ const CountDownTimer = ({ initialSeconds }: CountDownTimerProps) => {
   );
 };
 
+const CheckInternetState = () => {
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [showBanner, setShowBanner] = useState(false);
+
+  console.log("Show isOnline", isOnline);
+
+  useEffect(() => {
+    const handleOnline = () => {
+      setIsOnline(true);
+      setShowBanner(true);
+
+      const timer = setInterval(() => setShowBanner(false), 3000);
+      return () => clearInterval(timer);
+    };
+
+    const handleOffline = () => {
+      setIsOnline(false);
+      setShowBanner(true);
+    };
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
+
+  //   if (isOnline && !showBanner) return null;
+
+  return (
+    <div>
+      {isOnline ? "🟢 Connected back online" : "🔴 You are currently offline"}
+    </div>
+  );
+};
+
+interface WeatherData {
+  name: string;
+  main: {
+    temp: number;
+    humidity: number;
+  };
+  weather: Array<{
+    description: string;
+  }>;
+}
+
+const FetchWeatherApi = () => {
+  const [cityName, setCityName] = useState("");
+  const [searchInput, setSearchInput] = useState("");
+  const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const API_KEY = "e86b986fb158e202afe03cb94a0faf01";
+
+  useEffect(() => {
+    if (!cityName) return;
+
+    const fetchWeather = async () => {
+      setLoading(true);
+      setError("");
+
+      console.log("API called");
+      try {
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=metric&appid=${API_KEY}`;
+        const response = await fetch(url);
+
+        if (!response.ok) {
+          throw new Error("City not found. Please try another name.");
+        }
+
+        const data: WeatherData = await response.json();
+        console.log("API Data", data);
+        setWeatherData(data);
+      } catch (err: any) {
+        setError(err.message || "An unknown error occurred.");
+        setWeatherData(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchWeather();
+  }, [cityName]);
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    console.log("CityName", searchInput);
+    if (searchInput.trim()) {
+      setCityName(searchInput);
+    }
+  };
+
+  return (
+    <div className="weather-card">
+      <form onSubmit={handleSearchSubmit}>
+        <input
+          className="search-input"
+          type="text"
+          value={searchInput}
+          onChange={(e) => {
+            setSearchInput(e.target.value);
+          }}
+          placeholder="Enter City"
+        />
+        <button type="submit" className="hook-button">
+          Search
+        </button>
+      </form>
+
+      {/* Based on API conditioning Managed UI Layouts */}
+      {loading && (
+        <div className="weather-widget">
+          <p>Loading target city conditions...</p>
+        </div>
+      )}
+      {error && (
+        <div className="weather-widget">
+          <p style={{ color: "red" }}>⚠️ {error}</p>
+        </div>
+      )}
+
+      {weatherData && !loading && !error && (
+        <div className="weather-widget">
+          <h3>Current Condition in: {weatherData.name}</h3>
+          <p>{Math.round(weatherData.main.temp)}°C</p>
+          <p>Sky: {weatherData.weather[0].description}</p>
+          <p>Humidity Level: {weatherData.main.humidity}</p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+function UseRefDemo({ hookData }: { hookData: ReactHooksType }) {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
+  return (
+    <div>
+      <div className="hook-demo-card">
+        <div className="use-effect-exam" style={{ alignItems: "center" }}>
+          <h3>Auto Focus Input When Mount</h3>
+
+          <input
+            ref={inputRef}
+            className="search-input"
+            type="text"
+            placeholder="Enter Query"
+          />
+        </div>
+
+        <div className="use-effect-exam">
+          <h3>Previous value tracker</h3>
+          <ValueTracker />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const ValueTracker = () => {
+  const [count, setCount] = useState(0);
+
+  const prevValueRef = useRef<number | undefined>(undefined);
+
+  useEffect(() => {
+    console.log(count);
+    console.log("valueRef", prevValueRef.current);
+    prevValueRef.current = count;
+  }, [count]);
+
+  const prevValue = prevValueRef.current; //saving prev value for later comparison
+
+  console.log("Previous", prevValue);
+
+  return (
+    <div className="hook-demo-card">
+      <div className="use-state-exam">
+        <h4>Previouse State</h4>
+        <p>{prevValue === undefined ? "None" : prevValue}</p>
+        <button
+          className="hook-button"
+          onClick={() => {
+            setCount((prev) => prev + 1);
+          }}
+        >
+          Increment
+        </button>
+      </div>
+
+      <div className="use-state-exam">
+        <h4>Current State</h4>
+        <p>{count}</p>
+
+        <button
+          className="hook-button"
+          onClick={() => {
+            setCount((prev) => prev - 1);
+          }}
+        >
+          Decrement
+        </button>
+      </div>
+    </div>
+  );
+};
+
+function UseMemo() {
+  return (
+    <div>
+      <div className="hook-demo-card">
+        <div className="use-effect-exam"></div>
+      </div>
+    </div>
+  );
+}
+
 function selectedHookView(selectedHook: ReactHooksType) {
   switch (selectedHook.name) {
     case "useState":
       return <UseStateDemo hookData={selectedHook} />;
     case "useEffect":
       return <UseEffectDemo hookData={selectedHook} />;
+    case "useRef":
+      return <UseRefDemo hookData={selectedHook} />;
+    case "useMemo":
+      return <UseMemo />;
 
     default:
       return <div></div>;
