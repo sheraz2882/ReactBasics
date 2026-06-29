@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 
 interface ReactHooksType {
   code: string;
@@ -540,11 +540,167 @@ function UseMemo() {
   return (
     <div>
       <div className="hook-demo-card">
-        <div className="use-effect-exam"></div>
+        <div className="use-effect-exam">
+          <ProductFiltering />
+        </div>
       </div>
     </div>
   );
 }
+
+interface ProductType {
+  id: number;
+  name: string;
+  category: string;
+  price: number;
+}
+
+const MOCK_PRODUCTS: ProductType[] = Array.from({ length: 500 }, (_, index) => {
+  const categories = ["Electronics", "Clothing", "Home", "Books"];
+  const category = categories[index % categories.length];
+
+  return {
+    id: index + 1,
+    name: `${category} Item #${index + 1}`,
+    category: category,
+    price: Math.floor(Math.random() * 900) + 100,
+  };
+});
+
+const ProductFiltering = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  const filterProductsWithoutMemo = () => {
+    console.log("❌ Bad: Filtering 500 items WITHOUT useMemo...");
+
+    return MOCK_PRODUCTS.filter((product) => {
+      const matchesSearch = product.name
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      const matchesCategory =
+        selectedCategory === "All" || product.category === selectedCategory;
+
+      return matchesSearch && matchesCategory;
+    });
+  };
+
+  const unoptimizedProducts = filterProductsWithoutMemo();
+
+  const optimizedProducts = useMemo(() => {
+    console.log("✅ Good: Filtering 500 items WITH useMemo!");
+    return MOCK_PRODUCTS.filter((product) => {
+      const matchesSearch = product.name
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      const matchesCategory =
+        selectedCategory === "All" || product.category === selectedCategory;
+      return matchesSearch && matchesCategory;
+    });
+  }, [searchTerm, selectedCategory]);
+
+  return (
+    <div
+      style={{
+        maxWidth: "800px",
+        margin: "20px auto",
+        padding: "20px",
+        fontFamily: "Arial, sans-serif",
+        backgroundColor: isDarkMode ? "#1e1e1e" : "#ffffff",
+        color: isDarkMode ? "#ffffff" : "#000000",
+        transition: "background-color 0.2s ease",
+      }}
+    >
+      <h2 style={{ color: isDarkMode ? "#ffffff" : "#000000" }}>
+        📦 Smart Product Catalog
+      </h2>
+
+      {/* Trigger an unrelated re-render block */}
+      <div
+        style={{
+          marginBottom: "20px",
+          padding: "10px",
+          background: isDarkMode ? "#1e1e1e" : "#ffffff",
+          color: "#000",
+        }}
+      >
+        <p style={{ color: isDarkMode ? "#ffffff" : "#000000" }}>
+          <strong>Test Performance:</strong> Look at your browser console. Click
+          this toggle button. The "Bad" console log will fire every time, but
+          the "Good" memo log will stay silent!
+        </p>
+        <button onClick={() => setIsDarkMode((prev) => !prev)}>
+          Toggle Dark Mode (Current: {isDarkMode ? "Dark" : "Light"})
+        </button>
+
+        {/* Filter Inputs Controls */}
+        <div
+          style={{
+            display: "flex",
+            gap: "15px",
+            marginTop: "10px",
+            marginBottom: "20px",
+          }}
+        >
+          <input
+            type="text"
+            placeholder="Search items..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{ padding: "8px", flex: 1 }}
+          />
+
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            style={{ padding: "8px" }}
+          >
+            <option value="All">All Categories</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Home">Home</option>
+            <option value="Books">Books</option>
+          </select>
+        </div>
+
+        {/* Display Results */}
+        <h3 style={{ color: isDarkMode ? "#ffffff" : "#000000" }}>
+          Showing {optimizedProducts.length} Results
+        </h3>
+        <div
+          style={{
+            maxHeight: "300px",
+            overflowY: "scroll",
+            border: `1px solid ${isDarkMode ? "#fff" : "#ccc"}`,
+            padding: "10px",
+          }}
+        >
+          {/* Swapping 'unoptimizedProducts' with 'optimizedProducts' prevents execution lag */}
+          {optimizedProducts.map((product) => (
+            <div
+              key={product.id}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                padding: "6px 0",
+                borderBottom: "1px solid #eee",
+              }}
+            >
+              <span style={{ color: isDarkMode ? "#ffffff" : "#000000" }}>
+                {product.name} ({product.category})
+              </span>
+              <strong style={{ color: isDarkMode ? "#ffffff" : "#000000" }}>
+                ${product.price}
+              </strong>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 function selectedHookView(selectedHook: ReactHooksType) {
   switch (selectedHook.name) {
