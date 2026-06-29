@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { useState, useEffect, useRef, useMemo } from "react";
 
 interface ReactHooksType {
@@ -537,16 +537,44 @@ const ValueTracker = () => {
 };
 
 function UseMemo() {
+  const [count, setCount] = useState(0);
+  const items = useMemo(() => ["Apple", "Mangos", "Banana", "Cherry"], []);
+
   return (
     <div>
       <div className="hook-demo-card">
         <div className="use-effect-exam">
+          <button
+            className="hook-button"
+            onClick={() => {
+              setCount(count + 1);
+            }}
+          >
+            Count : {count}
+          </button>
+          <ExpensiveList items={items} />
           <ProductFiltering />
         </div>
       </div>
     </div>
   );
 }
+
+const ExpensiveList = memo(function ExpensiveList({
+  items,
+}: {
+  items: string[];
+}) {
+  console.log("ExpensiveList Rendered");
+
+  return (
+    <ul>
+      {items.map((item, index) => (
+        <li key={index}>{item}</li>
+      ))}
+    </ul>
+  );
+});
 
 interface ProductType {
   id: number;
